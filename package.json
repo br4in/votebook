@@ -1,0 +1,23 @@
+{
+  "name": "votebook",
+  "version": "1.0.0",
+  "description": "Build a Voting App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/br4in/votebook.git"
+  },
+  "author": "br4in",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/br4in/votebook/issues"
+  },
+  "homepage": "https://github.com/br4in/votebook#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mongodb": "^2.2.11"
+  }
+}
