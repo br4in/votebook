@@ -13,7 +13,7 @@ mongo.connect(url, function (error, db) {
     if (error) throw error;
     console.log('Successfully connected on port 27017');
     
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, '/public')));
     app.use(express.static(path.join(__dirname, 'app/controllers')));
     
     routes(app, db);
