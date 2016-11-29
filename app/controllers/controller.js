@@ -8,6 +8,9 @@ $(document).ready(function () {
     
     $('.btn-new').click(function() {
         console.log('new poll');
+        $.getJSON( "https://vote-app-br4in.c9users.io/new", function( result ) {
+            console.log(JSON.stringify(result)); 
+        });
     });
     
     $('.btn-my').click(function() {
@@ -17,17 +20,16 @@ $(document).ready(function () {
     
     
     function displayAllPolls() {
+        $("#content").empty();
         $.getJSON( "https://vote-app-br4in.c9users.io/all", function( result ) {
-            // $.each(result, function(i, field){
-            //     $("#content").append(JSON.stringify(field) + " ");
-            // });
-            $("#content").append(JSON.stringify(result[0]['name']));
-            // for (var i = 0; i < result.length; i++) {
-            //     var poll = {};
-            //     poll.name = result[i][0];
-            //     $("#content").append(poll.name);
-            // }
+            for (var i = 0; i < result.length; i++) {
+                var poll = {};
+                poll.name = JSON.stringify(result[i]['name']);
+                var pollDiv = '<div id="poll-div"><p id="poll-name">' + poll.name + '</p></div>';
+            
+                $("#content").append(pollDiv);
+            }
+            
         });
 }
 });
-

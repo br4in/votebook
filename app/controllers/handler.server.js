@@ -8,7 +8,7 @@ function managePolls (db) {
         var clickProjection = { '_id': false };
         
         collection.find({}, clickProjection).toArray(function(error, result) {
-            if (error) throw error;
+            if (error) console.log(error);
             console.log(result);
             response.json(result);
         });
@@ -24,7 +24,8 @@ function managePolls (db) {
         collection.insert(poll, function (error, data) {
            if (error) throw error;
            console.log(data);
-           db.close();
+           response.json(data);
+           
         });
     };
     
@@ -34,7 +35,6 @@ function managePolls (db) {
         }).toArray(function (error, docs) {
             if (error) throw error;
             console.log(docs);
-            db.close();
         });
     };
 }
