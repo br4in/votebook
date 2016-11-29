@@ -14,7 +14,7 @@ mongo.connect(url, function (error, db) {
     console.log('Successfully connected on port 27017');
     
     app.use(express.static(path.join(__dirname, '/public')));
-    app.use(express.static(path.join(__dirname, 'app/controllers')));
+    app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
     
     routes(app, db);
 
