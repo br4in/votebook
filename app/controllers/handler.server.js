@@ -7,10 +7,12 @@ function managePolls (db) {
         console.log('Find all docs in db');
         var clickProjection = { '_id': false };
         
-        collection.find({}, clickProjection).toArray(function(error, result) {
-            if (error) console.log(error);
-            console.log(result);
-            response.json(result);
+        collection.find({}, clickProjection).sort({
+			date: -1
+            }).toArray(function(error, result) {
+                if (error) console.log(error);
+                console.log(result);
+                response.json(result);
         });
     };
     
@@ -19,7 +21,7 @@ function managePolls (db) {
         collection.insert(poll, function (error, data) {
            if (error) throw error;
            console.log(data);
-           
+           response.redirect('/');
         });
     };
     

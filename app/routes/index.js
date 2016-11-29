@@ -34,13 +34,20 @@ module.exports = function (app, db) {
     // TEST!!
         .post(function (request, response) {
             console.log('route /new');
+            var date = new Date();
             
             var name = request.body.pollName;
-            var author = request.body.pollAuthor;
+            var author = 'br4in';
             var poll = {
                 'name': name,
-                'author': author
+                'author': author,
+                'date': date.toUTCString()
             };
+            // handle multiple options --- leaving incomplete --- continuing tomorrow
+            // for (var i = 1; i < request.body; i++) {
+            //     poll.opt = request.body[i];
+            // }
+            
             managePolls.insertPoll(request, response, poll);
         });
     
