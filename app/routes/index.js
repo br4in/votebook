@@ -36,4 +36,10 @@ module.exports = function (app, db) {
             console.log('route /new');
             managePolls.insertPoll(request, response);
         });
+    
+    app.route('/my')
+        .get(function (request, response) {
+            console.log('route /my');
+            managePolls.myPolls(request, response);
+        });
 };

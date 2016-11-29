@@ -16,7 +16,7 @@ function managePolls (db) {
     
     this.insertPoll = function (request, response) {
         var poll = {
-            'name': 'this is a test',
+            'name': 'this is a test3',
             'author': 'user1',
             'option1': 'test2',
             'option2': 'test3'
@@ -34,7 +34,7 @@ function managePolls (db) {
             'author': 'user1'
         }).toArray(function (error, docs) {
             if (error) throw error;
-            console.log(docs);
+            response.json(docs);
         });
     };
 }

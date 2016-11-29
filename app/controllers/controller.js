@@ -1,9 +1,11 @@
 /* global $ */
 
 $(document).ready(function () {
+    displayAllPolls('all');
+    
     $('.btn-all').click(function() {
         console.log('all-btn');
-        displayAllPolls();
+        displayAllPolls('all');
     });
     
     $('.btn-new').click(function() {
@@ -15,13 +17,14 @@ $(document).ready(function () {
     
     $('.btn-my').click(function() {
         console.log('my polls');
+        displayAllPolls('my');
     });
     
     
     
-    function displayAllPolls() {
+    function displayAllPolls(route) {
         $("#content").empty();
-        $.getJSON( "https://vote-app-br4in.c9users.io/all", function( result ) {
+        $.getJSON( "https://vote-app-br4in.c9users.io/" + route, function( result ) {
             for (var i = 0; i < result.length; i++) {
                 var poll = {};
                 poll.name = JSON.stringify(result[i]['name']);
