@@ -32,9 +32,16 @@ module.exports = function (app, db) {
         
     app.route('/new')
     // TEST!!
-        .get(function (request, response) {
+        .post(function (request, response) {
             console.log('route /new');
-            managePolls.insertPoll(request, response);
+            
+            var name = request.body.pollName;
+            var author = request.body.pollAuthor;
+            var poll = {
+                'name': name,
+                'author': author
+            };
+            managePolls.insertPoll(request, response, poll);
         });
     
     app.route('/my')

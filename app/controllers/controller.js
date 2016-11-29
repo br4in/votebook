@@ -10,9 +10,9 @@ $(document).ready(function () {
     
     $('.btn-new').click(function() {
         console.log('new poll');
-        $.getJSON( "https://vote-app-br4in.c9users.io/new", function( result ) {
-            console.log(JSON.stringify(result)); 
-        });
+        $('#content').empty();
+        var pollForm = '<form method="post" action="/new"><input type="text" name="pollName"><input type="text" name="pollAuthor"><input type="submit"></form>';
+        $("#content").append(pollForm);
     });
     
     $('.btn-my').click(function() {

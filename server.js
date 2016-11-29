@@ -3,7 +3,8 @@
 var express = require("express"),
     routes = require("./app/routes/index.js"),
     path = require("path"),
-    mongo = require("mongodb").MongoClient;
+    mongo = require("mongodb").MongoClient,
+    bodyParser = require('body-parser');
 
 var app = express();
 
@@ -15,6 +16,7 @@ mongo.connect(url, function (error, db) {
     
     app.use(express.static(path.join(__dirname, '/public')));
     app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
+    app.use(bodyParser.urlencoded({ extended: false }));
     
     routes(app, db);
 

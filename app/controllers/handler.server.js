@@ -14,24 +14,18 @@ function managePolls (db) {
         });
     };
     
-    this.insertPoll = function (request, response) {
-        var poll = {
-            'name': 'this is a test3',
-            'author': 'user1',
-            'option1': 'test2',
-            'option2': 'test3'
-        };
+    this.insertPoll = function (request, response, poll) {
+        
         collection.insert(poll, function (error, data) {
            if (error) throw error;
            console.log(data);
-           response.json(data);
            
         });
     };
     
     this.myPolls = function (request, response) {
         collection.find({
-            'author': 'user1'
+            'author': 'br4in'
         }).toArray(function (error, docs) {
             if (error) throw error;
             response.json(docs);
