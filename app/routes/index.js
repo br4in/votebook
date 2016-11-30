@@ -19,7 +19,6 @@ module.exports = function (app, db) {
         
     app.route('/login')
         .get(function (request, response) {
-           // load all posted polls and display them inside content div
            isLogged = true;
            response.sendFile(process.cwd() + '/public/intro.html');
         });
@@ -32,7 +31,6 @@ module.exports = function (app, db) {
         });
         
     app.route('/new')
-    // TEST!!
         .post(function (request, response) {
             console.log('route /new');
             
@@ -42,15 +40,16 @@ module.exports = function (app, db) {
             //handle multiple options
             var x = 1;
             for (var i in request.body) {
-                if (i === 'pollName') {
-                    poll.name = request.body[i];
-                } else {
-                    var optN = 'opt' + x;
-                    poll[optN] = request.body[i];
-                    x += 1; // TEST!!
+                if (request.body[i] !== '') {
+                    if (i === 'pollName') {
+                        poll.name = request.body[i];
+                    } else {
+                        var optN = 'opt' + x;
+                        poll[optN] = request.body[i];
+                        x += 1;
+                    }
                 }
             }
-            
             poll.date = date.toUTCString();
             managePolls.insertPoll(request, response, poll);
         });

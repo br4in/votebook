@@ -11,7 +11,6 @@ $(document).ready(function () {
         $('#poll-options-div').append(newOpt);
         count += 1;
     });
-
     
     $('.btn-all').click(function() {
         console.log('all-btn');
@@ -22,7 +21,7 @@ $(document).ready(function () {
         console.log('new poll');
         $('#content').empty();
         var pollForm = `
-            <form method="post" action="/new">
+            <form method="post" action="/new" id="poll-form">
                 <div id="poll-name-div">
                     <p>Poll name: </p>
                     <input type="text" name="pollName">
@@ -31,6 +30,7 @@ $(document).ready(function () {
                 <button type="button" id="add-opt-btn"></button>
                 <div id="poll-options-div">
                     <input type="text" name="pollOpt">
+                    <input type="text" name="pollOpt0">
                 </div>
                 <input id="submit-btn" type="submit">
             </form>`;
@@ -46,10 +46,10 @@ $(document).ready(function () {
         $("#content").empty();
         $.getJSON( "https://vote-app-br4in.c9users.io/" + route, function( result ) {
             for (var i = 0; i < result.length; i++) {
-                var poll = {};
-                poll.name = JSON.stringify(result[i]['name']);
-                var pollDiv = '<div id="poll-div"><p id="poll-name">' + poll.name + '</p></div>';
-            
+                var pollName = JSON.stringify(result[i]['name']).replace(/["]+/g, '');
+                
+                var pollDiv = '<div id="poll-div"><p id="poll-name">' + pollName + '</p></div>';
+
                 $("#content").append(pollDiv);
             }
             
