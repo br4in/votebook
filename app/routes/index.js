@@ -27,6 +27,7 @@ module.exports = function (app, db) {
     app.route('/all')
         .get(function (request, response) {
             console.log('route /all');
+            
             managePolls.getAllPolls(request, response);
         });
         
@@ -34,20 +35,23 @@ module.exports = function (app, db) {
     // TEST!!
         .post(function (request, response) {
             console.log('route /new');
+            
             var date = new Date();
+            // create poll object
+            var poll = {};
+            //handle multiple options
+            var x = 1;
+            for (var i in request.body) {
+                if (i === 'pollName') {
+                    poll.name = request.body[i];
+                } else {
+                    var optN = 'opt' + x;
+                    poll[optN] = request.body[i];
+                    x += 1; // TEST!!
+                }
+            }
             
-            var name = request.body.pollName;
-            var author = 'br4in';
-            var poll = {
-                'name': name,
-                'author': author,
-                'date': date.toUTCString()
-            };
-            // handle multiple options --- leaving incomplete --- continuing tomorrow
-            // for (var i = 1; i < request.body; i++) {
-            //     poll.opt = request.body[i];
-            // }
-            
+            poll.date = date.toUTCString();
             managePolls.insertPoll(request, response, poll);
         });
     

@@ -1,13 +1,17 @@
 /* global $ */
 
 $(document).ready(function () {
-    displayAllPolls('all');
     
-    // handle form submission
-    $('form').submit(function() {
-        console.log('not submitted');
-        return false;
+    displayAllPolls('all');
+
+    var count = 1;
+    $('#content').on('click', 'button', function(){
+        console.log('more options clicked');
+        var newOpt = '<input type="text" name="pollOpt' + count + '">';
+        $('#poll-options-div').append(newOpt);
+        count += 1;
     });
+
     
     $('.btn-all').click(function() {
         console.log('all-btn');
@@ -17,7 +21,19 @@ $(document).ready(function () {
     $('.btn-new').click(function() {
         console.log('new poll');
         $('#content').empty();
-        var pollForm = '<form method="post" action="/new"><input type="text" name="pollName"><input type="text" name="pollOpt"><input id="submit-btn" type="submit"></form>';
+        var pollForm = `
+            <form method="post" action="/new">
+                <div id="poll-name-div">
+                    <p>Poll name: </p>
+                    <input type="text" name="pollName">
+                </div>
+                <p>Poll options: </p>
+                <button type="button" id="add-opt-btn"></button>
+                <div id="poll-options-div">
+                    <input type="text" name="pollOpt">
+                </div>
+                <input id="submit-btn" type="submit">
+            </form>`;
         $("#content").append(pollForm);
     });
     
@@ -25,14 +41,6 @@ $(document).ready(function () {
         console.log('my polls');
         displayAllPolls('my');
     });
-    
-    // handle form submission
-    $('form').submit(function() {
-        console.log('not submitted');
-        return false;
-    });
-    
-    
     
     function displayAllPolls(route) {
         $("#content").empty();
