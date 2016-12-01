@@ -1,15 +1,14 @@
 'use strict';
 
-function managePolls (db) {
+function managePolls (db, ObjectId) {
     var collection = db.collection('polls');
     
     this.getAllPolls = function (request, response) {
         console.log('Find all docs in db');
-        var clickProjection = { '_id': false };
         
-        collection.find({}, clickProjection).sort({
-			date: -1
-            }).toArray(function(error, result) {
+        collection.find({}).sort({
+			date: -1                                // polls of older day don't
+            }).toArray(function(error, result) {    // get sorted correctly
                 if (error) console.log(error);
                 console.log(result);
                 response.json(result);
@@ -32,6 +31,15 @@ function managePolls (db) {
             if (error) throw error;
             response.json(docs);
         });
+    };
+    
+    this.showPoll = function (request, response, ID) {
+        collection.find({
+            '_id': ObjectId(ID)
+        }).toArray(function (error, result) {
+            if (error) throw error;
+            response.json(result);
+        });  
     };
 }
 

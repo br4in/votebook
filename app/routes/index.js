@@ -4,9 +4,9 @@ var managePollsModule = require(process.cwd() + '/app/controllers/handler.server
 // TEST!
 var isLogged = false;
 
-module.exports = function (app, db) {
+module.exports = function (app, db, ObjectId) {
     
-    var managePolls = new managePollsModule(db);
+    var managePolls = new managePollsModule(db, ObjectId);
     
     app.route('/')
         .get(function (request, response) {
@@ -33,10 +33,12 @@ module.exports = function (app, db) {
     app.route('/new')
         .post(function (request, response) {
             console.log('route /new');
-            
+            console.log(request.body);
             var date = new Date();
             // create poll object
             var poll = {};
+            poll.date = date.toUTCString();
+            poll._id = ObjectId();
             //handle multiple options
             var x = 1;
             for (var i in request.body) {
@@ -50,7 +52,7 @@ module.exports = function (app, db) {
                     }
                 }
             }
-            poll.date = date.toUTCString();
+            
             managePolls.insertPoll(request, response, poll);
         });
     
@@ -58,5 +60,12 @@ module.exports = function (app, db) {
         .get(function (request, response) {
             console.log('route /my');
             managePolls.myPolls(request, response);
+        });
+        
+    app.route('/poll/:id')
+        .get(function(request, response) {
+            console.log('route /poll');
+            var ID = request.params.id;
+            managePolls.showPoll(request, response, ID);
         });
 };

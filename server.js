@@ -4,6 +4,7 @@ var express = require("express"),
     routes = require("./app/routes/index.js"),
     path = require("path"),
     mongo = require("mongodb").MongoClient,
+    ObjectId = require('mongodb').ObjectID,
     bodyParser = require('body-parser');
 
 var app = express();
@@ -19,7 +20,7 @@ mongo.connect(url, function (error, db) {
     app.use(bodyParser.urlencoded({ extended: false }));
     
     
-    routes(app, db);
+    routes(app, db, ObjectId);
 
     app.listen('8080', function () {
         console.log('Server listening on port 8080.');
