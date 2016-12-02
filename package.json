@@ -18,6 +18,7 @@
   "homepage": "https://github.com/br4in/votebook#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "chart.js": "^2.4.0",
     "express": "^4.14.0",
     "mongodb": "^2.2.11"
   }

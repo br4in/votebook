@@ -1,15 +1,17 @@
 /* global $ */
 
 $(document).ready(function () {
-    
+    // display all polls 
     displayAllPolls('all');
     
+    // listen for clicked poll
     $('#content').on('click', 'a', function(event) {
         event.preventDefault();
         var ID = $(this).attr('href').replace('/poll/', '');
         displayPoll(ID);
     });
-
+    
+    // listen for '+' btn clicked and append new input
     var count = 1;
     $('#content').on('click', 'button', function(){
         var newOpt = '<input type="text" name="pollOpt' + count + '">';
@@ -17,12 +19,14 @@ $(document).ready(function () {
         count += 1;
     });
     
+    // handle btn-all click
     $('.btn-all').click(function() {
         console.log('all-btn');
         displayAllPolls('all');
         $('#content-description').text("Here's the list of all posted polls");
     });
     
+    // handle btn-new click and display form 
     $('.btn-new').click(function() {
         console.log('new poll');
         $('#content').empty();
@@ -44,12 +48,14 @@ $(document).ready(function () {
         $("#content").append(pollForm);
     });
     
+    // // handle btn-my click and display user's polls
     $('.btn-my').click(function() {
         console.log('my polls');
         displayAllPolls('my');
         $('#content-description').text("Here's the list of all the polls you posted");
     });
     
+    // display all polls in db
     function displayAllPolls(route) {
         $("#content").empty();
         $.getJSON( "https://vote-app-br4in.c9users.io/" + route, function( result ) {
@@ -70,43 +76,86 @@ $(document).ready(function () {
         });
     }
     
+    // display a single poll and its values
     function displayPoll(ID) {
         $('#content').empty();
+        // create array to store poll's options to use for creating the chart
+        var opts = [];
+        var optsVotes = [];
         
         $.getJSON( "https://vote-app-br4in.c9users.io/poll/" + ID, function(result) {
-            
+            // get poll name and edit it if too large
             var pollName = JSON.stringify(result[0]['name']).replace(/["]+/g, '');
             if (pollName.length > 100) {
                 pollName = pollName.substring(0,100) + '...';
             }
+            
             $('#content-description').text(pollName);
+            // create div 
             var pollDiv = `
             <div id="vote-options-div" class="left-side">
                 <p>Options:</p>
             </div>
             <div id="vote-chart-div" class="right-side">
-                <h1>chart goes here</h1>
+                <canvas id="myChart"></canvas>
             </div>
             `;
-
+            
+            // append it 
             $("#content").append(pollDiv);
             
+            // determine how many options the poll has and append them
             for (var i = 0; i < Object.size(result[0]); i++) {
                 var opt = 'opt' + (i + 1);
+                var optVote = opt + 'Vote';
                 
                 var optionText = JSON.stringify(result[0][opt]).replace(/["]+/g, '');
+                var optionVote = JSON.stringify(result[0][optVote]).replace(/["]+/g, '');
+                opts.push(optionText);
+                optsVotes.push(optionVote);
                 var optionDiv = '<button class="vote-option">' + optionText + '</button>';
                 $('#vote-options-div').append(optionDiv);
-                console.log('appended');
+                
             }
+            
+            // display chart
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: opts,
+                    datasets: [{
+                        backgroundColor: randomColor(opts),
+                    data: optsVotes
+                    }]
+                }
+            });
+            
         });
     }
     
+    // loop through a JSON obj and return its length
+    // minus 3 to remove : _id, date, name.
+    // divided by 2 to remove the votes fields
     Object.size = function(obj) {
         var size = 0, key;
         for (key in obj) {
             if (obj.hasOwnProperty(key)) size++;
         }
-        return size - 3; 
+        
+        return (size - 3) / 2;
     };
+    
+    // pick random color from number of options
+    function randomColor(opts) {
+        var colors = ['red', 'blue', 'green', 'gray', 'black', 'dodgerblue', 'brown', 'yellow', 'cyan', 'purple'];
+        var optsColors = [];
+        
+        for (var i = 0; i < opts.length; i++) {
+            optsColors.push(colors[Math.floor(Math.random() * colors.length)]);
+        }
+        
+        return optsColors;
+    }
+    
 });

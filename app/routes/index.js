@@ -47,7 +47,9 @@ module.exports = function (app, db, ObjectId) {
                         poll.name = request.body[i];
                     } else {
                         var optN = 'opt' + x;
+                        var optVote  = optN + 'Vote'; 
                         poll[optN] = request.body[i];
+                        poll[optVote] = 0;
                         x += 1;
                     }
                 }
