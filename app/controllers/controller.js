@@ -11,6 +11,13 @@ $(document).ready(function () {
         displayPoll(ID);
     });
     
+    // listen for clicked poll's option
+    $('#content').on('click', '.vote-option', function() {
+        var url = $(this).attr('href');
+        var ID = url.substring(0, url.lastIndexOf('/'));
+        votePoll(url, ID);
+    });
+    
     // listen for '+' btn clicked and append new input
     var count = 1;
     $('#content').on('click', 'button', function(){
@@ -113,7 +120,8 @@ $(document).ready(function () {
                 var optionVote = JSON.stringify(result[0][optVote]).replace(/["]+/g, '');
                 opts.push(optionText);
                 optsVotes.push(optionVote);
-                var optionDiv = '<button class="vote-option">' + optionText + '</button>';
+                console.log(optionText, optionVote);
+                var optionDiv = '<button href="' + ID + '/' + optVote + '" class="vote-option">' + optionText + '</button>';
                 $('#vote-options-div').append(optionDiv);
                 
             }
@@ -131,6 +139,12 @@ $(document).ready(function () {
                 }
             });
             
+        });
+    }
+    
+    function votePoll (url, ID) {
+        $.getJSON("https://vote-app-br4in.c9users.io/vote/" + url, function(result) {
+            displayPoll(ID);
         });
     }
     

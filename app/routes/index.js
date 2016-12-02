@@ -65,9 +65,17 @@ module.exports = function (app, db, ObjectId) {
         });
         
     app.route('/poll/:id')
-        .get(function(request, response) {
+        .get(function (request, response) {
             console.log('route /poll');
             var ID = request.params.id;
             managePolls.showPoll(request, response, ID);
+        });
+        
+    app.route('/vote/:id/:opt')
+        .get(function (request, response) {
+            console.log('route /vote/id/opt');
+            var ID = request.params.id;
+            var opt = request.params.opt;
+            managePolls.votePoll(request, response, ID, opt);
         });
 };

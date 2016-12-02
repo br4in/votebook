@@ -41,6 +41,22 @@ function managePolls (db, ObjectId) {
             response.json(result);
         });  
     };
+    
+    this.votePoll = function (request, response, ID, opt) {
+        var variable = opt;
+        var action = {};
+        action[variable] = 1;
+        
+        collection.update({
+            '_id': ObjectId(ID)
+        }, {
+            $inc: action
+        });
+        var result = {
+            result: 'Vote added'
+        }
+        response.json(result);
+    };
 }
 
 module.exports = managePolls;
