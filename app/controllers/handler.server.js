@@ -24,9 +24,9 @@ function managePolls (db, ObjectId) {
         });
     };
     
-    this.myPolls = function (request, response) {
+    this.myPolls = function (request, response, user) {
         collection.find({
-            'author': 'br4in'
+            author: user
         }).toArray(function (error, docs) {
             if (error) throw error;
             response.json(docs);
@@ -54,8 +54,28 @@ function managePolls (db, ObjectId) {
         });
         var result = {
             result: 'Vote added'
-        }
+        };
         response.json(result);
+    };
+    
+    this.removePoll = function (request, response, ID) {
+        collection.remove({
+            _id: ObjectId(ID)
+        });
+        var result = {
+            result: 'Poll deleted'
+        };
+        response.json(result);
+    };
+    
+    this.insertOption = function (request, response, ID, opt) {
+        console.log(opt);
+        collection.update({
+            '_id': ObjectId(ID)
+        }, {
+            $set: opt
+        });
+        response.redirect('/share/'+ ID);
     };
 }
 

@@ -1,4 +1,5 @@
 nav {
+    min-width: 400px;
     background-color: white;
     height: 50px;
     border-bottom: 1px solid gray;
@@ -117,6 +118,7 @@ body {
     border-radius: 10px;
     box-shadow: 15px 10px 1px rgba(0, 0, 0, 0.5);
     overflow-y: scroll;
+    font-family: 'Lato', sans-serif;
 }
 
 .hidden {
@@ -154,11 +156,16 @@ body {
 }
 
 #poll-name {
-    font-family: 'Lato', sans-serif;
     font-size: 16px;
     font-weight: bold;
 }
 
+#poll-name-my{
+    float: left;
+    width: 70%;
+    font-size: 16px;
+    font-weight: bold;
+}
 
 form {
     width: 80%;
@@ -169,7 +176,6 @@ form {
 }
 
 form p {
-    font-family: 'Lato', sans-serif;
     font-weight: bold;
     margin: 0;
 }
@@ -199,7 +205,6 @@ input {
     min-width: 230px;
     text-align: center;
     outline: none;
-    font-family: 'Lato', sans-serif;
     margin: 1%;
 }
 
@@ -208,7 +213,7 @@ input:focus {
     box-shadow: 3px 2px 1px rgba(0, 0, 0, 0.4);
 }
 
-#add-opt-btn {
+#add-opt-btn, #add-opt-btn-late {
     width: 24px;
     height: 24px;
     background-color: white;
@@ -226,16 +231,79 @@ input:focus {
     min-width: 230px;
     text-align: center;
     outline: none;
-    font-family: 'Lato', sans-serif;
     margin: 1%;
     background-color: white;
 }
 
 #vote-options-div {
-    padding: 10px;
+    padding: 0 10px;
+    width: 50%;
+    min-width: 260px;
+    max-height: 300px;
+    overflow-y: scroll;
+    text-align: center;
+}
+
+#vote-chart-div {
     width: 50%;
     min-width: 260px;
     overflow-y: scroll;
     text-align: center;
-    font-family: 'Lato', sans-serif;
+}
+
+#link-div {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 300px;
+    text-align: center;
+}
+
+#delete-poll {
+    float: right;
+}
+
+@media (max-width: 1041px) {
+    #vote-options-div {
+        float: none;
+        min-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        max-height: 150px;
+    }
+    
+    #vote-chart-div {
+        float: none;
+        min-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+    }
+    
+    #link-div {
+        margin-top: inherit;
+    }
+    
+     #link-div p {
+        font-size: 13px;
+    }
+    
+}
+
+@media (max-width: 400px) {
+    #title-div {
+        margin: 0;
+    }
+    
+    #title-div h1 {
+        font-size: 45px;
+    }
+    #content-div {
+        min-width: 390px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    #content {
+        min-width: 350px;
+    }
 }
