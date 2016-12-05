@@ -34,28 +34,33 @@ module.exports = function (app, db, ObjectId, passport) {
     app.route('/new')
         .post(function (request, response) {
             console.log('route /new');
-            var date = new Date();
-            // create poll object
-            var poll = {};
-            poll.date = date.toUTCString();
-            poll._id = ObjectId();
-            poll.author = request.user.username, null, 4;
-            //handle multiple options
-            var x = 1;
-            for (var i in request.body) {
-                if (request.body[i] !== '') {
-                    if (i === 'pollName') {
-                        poll.name = request.body[i];
-                    } else {
-                        var optN = 'opt' + x;
-                        var optVote = optN + 'Vote'; 
-                        poll[optN] = request.body[i];
-                        poll[optVote] = 0;
-                        x += 1;
+            // check if at least the name field is filled
+            if (request.body['pollName'] !== '') {
+                // create poll object
+                var poll = {};
+                var date = new Date();
+                poll.date = date.toUTCString();
+                poll._id = ObjectId();
+                poll.author = request.user.username, null, 4;
+                //handle multiple options
+                var x = 1;
+                for (var i in request.body) {
+                    if (request.body[i] !== '') {
+                        if (i === 'pollName') {
+                            poll.name = request.body[i];
+                        } else {
+                            var optN = 'opt' + x;
+                            var optVote = optN + 'Vote'; 
+                            poll[optN] = request.body[i];
+                            poll[optVote] = 0;
+                            x += 1;
+                        }
                     }
                 }
+                managePolls.insertPoll(request, response, poll);
+            } else {
+                response.redirect('/');
             }
-            managePolls.insertPoll(request, response, poll);
         });
         
     app.route('/newOpt')

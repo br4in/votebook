@@ -105,14 +105,6 @@ $(document).ready(function () {
         }
     });
     
-    // handle profile page link from guest user
-    $('#profile-link').click(function(event) {
-        if (!isLogged) {
-            alert('You need to be logged-in to see your profile');
-            event.preventDefault();
-        }
-    });
-    
     // ----------------------------- Functions -----------------------------
     // display all polls in db
     function displayAllPolls(route) {
@@ -120,36 +112,34 @@ $(document).ready(function () {
         hasVoted = false;
         $.getJSON( "https://vote-app-br4in.c9users.io/" + route, function( result ) {
             for (var i = 0; i < result.length; i++) {
-                //handle empty polls -- 'work on prevent posting blank polls'
-                if (result[i]['name'] !== undefined) {
-                    var pollName = JSON.stringify(result[i]['name']).replace(/["]+/g, '');
-                    if (pollName.length > 61) {
-                        pollName = pollName.substring(0,61) + '...';
-                    }
-                    var pollID = JSON.stringify(result[i]['_id']).replace(/["]+/g, '');
-                
-                    var pollDiv = '<a href="/poll/' + pollID + '"><div id="poll-div"><p id="poll-name">' + pollName + '</p></div></a>';
-                    var pollDivAuth = '<a href="/poll/' + pollID + '"><div id="poll-div"><p id="poll-name-my">' + pollName + '</p><a id="delete-poll" href="/delete/' + pollID + '">Delete</a></div></a>';
-                    
-                    if (route === 'my') {
-                        $("#content").append(pollDivAuth);
-                        console.log(route);
-                    } else {
-                        $("#content").append(pollDiv);
-                    }
+                var pollName = JSON.stringify(result[i]['name']).replace(/["]+/g, '');
+                if (pollName.length > 61) {
+                    pollName = pollName.substring(0,61) + '...';
+                }
+                var pollID = JSON.stringify(result[i]['_id']).replace(/["]+/g, '');
+                var pollDiv = '<a href="/poll/' + pollID + '">\
+                    <div id="poll-div"><p id="poll-name">' + pollName + '</p>\
+                    </div></a>';
+                var pollDivAuth = '<a href="/poll/' + pollID + '">\
+                    <div id="poll-div">\
+                    <p id="poll-name-my">' + pollName + '</p>\
+                    <a id="delete-poll" href="/delete/' + pollID + '">Delete</a>\
+                    </div></a>';
+                if (route === 'my') {
+                    $("#content").append(pollDivAuth);
+                } else {
+                    $("#content").append(pollDiv);
                 }
             }
         });
     }
     
-    // display a single poll and its values
+    // display a single poll
     function displayPoll(ID) {
         $('#content').empty();
-
-        // create array to store poll's options to use for creating the chart
+        // create array to store poll's options to use when creating the chart
         var opts = [];
         var optsVotes = [];
-        
         $.getJSON( "https://vote-app-br4in.c9users.io/poll/" + ID, function(result) {
             if (result.length !== 0) {
                 // get poll name and edit it if too large
@@ -158,9 +148,7 @@ $(document).ready(function () {
                     pollName = pollName.substring(0,100) + '...';
                 }
                 var pollUrl =  "https://vote-app-br4in.c9users.io/share/" + ID;
-            
                 $('#content-description').text(pollName);
-                // create div 
                 var pollDiv = `
                 <div id="vote-options-div" class="left-side">
                     <p>Options:</p>
@@ -172,16 +160,12 @@ $(document).ready(function () {
                     <p>`+ pollUrl +`</p>
                 </div>
                 `;
-            
-                // append it 
                 $("#content").append(pollDiv);
-            
-                // if user is logged, display add btn
+                // if user is logged, display add option btn
                 if (isLogged) {
                     var addBtn = '<button type="button" id="add-opt-btn-late"></button>';
                     $('#vote-options-div').prepend(addBtn);
                 }
-            
                 // determine how many options the poll has and append them
                 pollOptions = 0;
                 for (var i = 0; i < Object.size(result[0]); i++) {
@@ -200,7 +184,7 @@ $(document).ready(function () {
                 var ctx = document.getElementById("myChart").getContext('2d');
                 var myChart = new Chart(ctx, {
                     type: 'doughnut',
-                    responsive: false,
+                    responsive: true,
                     data: {
                         labels: opts,
                         datasets: [{
@@ -216,10 +200,16 @@ $(document).ready(function () {
             });
         }
     
-    // vote poll and refresh data
+    // vote poll and refresh view
     function votePoll (url, ID) {
         $.getJSON("https://vote-app-br4in.c9users.io/vote/" + url, function(result) {
             displayPoll(ID);
+        });
+    }
+    
+    function deletePoll(url) {
+        $.getJSON(url, function(result) {
+            displayAllPolls('my');
         });
     }
     
@@ -252,12 +242,8 @@ $(document).ready(function () {
     function getUserInfo() {
         $.getJSON("https://vote-app-br4in.c9users.io/profile", function(result) {
             if (result !== undefined) {
-                // get username
                 user = result.username;
-                // get login status
                 isLogged = result.logged;
-                
-                // display info
                 $('#user-name').text(user);
                 if (isLogged) {
                     $('#log-status').text('Logout');
@@ -267,13 +253,6 @@ $(document).ready(function () {
                     $('#log-status').attr('href', '/login');
                 }
             }
-        });
-    }
-    
-    function deletePoll(url) {
-        $.getJSON(url, function(result) {
-            console.log('poll deleted');
-            displayAllPolls('my');
         });
     }
 });

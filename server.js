@@ -38,7 +38,6 @@ mongo.connect(url, function (error, db) {
     passport.serializeUser(function(user, done) {
         // placeholder for custom user serialization
         // null is for errors
-        console.log(user.username);
         done(null, user);
     });
 
@@ -48,7 +47,6 @@ mongo.connect(url, function (error, db) {
         // null is for errors
         done(null, user);
     });
-    
     
     routes(app, db, ObjectId, passport);
 
