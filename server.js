@@ -28,7 +28,7 @@ mongo.connect(url, function (error, db) {
     passport.use(new GithubStrategy({
         clientID: "611e4add63e956fe7b7d",
         clientSecret: "ecff527971270e2c39c10fe3e312b8c91dc96650",
-        callbackURL: "https://vote-app-br4in.c9users.io/auth/github/callback"
+        callbackURL: "https://thevotebook.herokuapp.com/auth/github/callback"
         },
         function(accessToken, refreshToken, profile, done) {
         return done(null, profile);
